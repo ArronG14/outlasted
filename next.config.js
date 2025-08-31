@@ -10,6 +10,14 @@ const nextConfig = {
   experimental: {
     esmExternals: false,
   },
+  webpack: (config, { isServer }) => {
+    // Handle any webpack issues
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+    };
+    return config;
+  },
 };
 
 module.exports = nextConfig;
