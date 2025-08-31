@@ -35,14 +35,21 @@ export async function GET(request: NextRequest) {
       if (!profile) {
         // Create profile for social auth user
         const userData = data.user.user_metadata;
+        
+        // Extract user data safely
+        const firstName = userData?.first_name || userData?.given_name || 'User';
+        const lastName = userData?.last_name || userData?.family_name || '';
+        const fullName = userData?.full_name || `${firstName} ${lastName}`.trim();
+        const username = `user${data.user.id.substring(0, 8)}`;
+        
         await supabase
           .from('users')
           .insert({
             id: data.user.id,
-            first_name: userData?.first_name || userData?.given_name || 'User',
-            last_name: userData?.last_name || userData?.family_name || '',
-            username: `user${data.user.id.substring(0, 8)}`, // Temporary username
-            name: userData?.full_name || `${userData?.first_name || 'User'} ${userData?.last_name || ''}`,
+            first_name: firstName,
+            last_name: lastName,
+            username: username,
+            name: fullName,
           });
       }
     }
