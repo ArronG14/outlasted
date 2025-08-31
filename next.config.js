@@ -18,9 +18,9 @@ const nextConfig = {
     };
     return config;
   },
-  // Add output configuration for static export
-  output: 'export',
-  trailingSlash: true,
+  // Remove the static export configuration
+  // output: 'export',  // REMOVE THIS LINE
+  // trailingSlash: true,  // REMOVE THIS LINE
 };
 
 module.exports = nextConfig;
