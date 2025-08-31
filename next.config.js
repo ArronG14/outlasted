@@ -18,6 +18,9 @@ const nextConfig = {
     };
     return config;
   },
+  // Add output configuration for static export
+  output: 'export',
+  trailingSlash: true,
 };
 
 module.exports = nextConfig;
