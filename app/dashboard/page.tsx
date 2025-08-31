@@ -45,16 +45,23 @@ export default function DashboardPage() {
       }
 
       if (!profile) {
+        // Extract user metadata safely
+        const metadata = session.user.user_metadata || {};
+        const firstName = metadata.first_name || metadata.given_name || 'User';
+        const lastName = metadata.last_name || metadata.family_name || '';
+        const username = metadata.username || `user${session.user.id.substring(0, 8)}`;
+        const fullName = metadata.full_name || `${firstName} ${lastName}`.trim();
+        
         // Create profile for new user
         const { data: newProfile, error: createError } = await supabase
           .from('users')
           .insert({
             id: session.user.id,
-            first_name: session.user.user_metadata?.first_name || session.user.user_metadata?.given_name || 'User',
-            last_name: session.user.user_metadata?.last_name || session.user.user_metadata?.family_name || '',
-            username: session.user.user_metadata?.username || `user${session.user.id.substring(0, 8)}`,
-            name: session.user.user_metadata?.full_name || `${session.user.user_metadata?.first_name || 'User'} ${session.user.user_metadata?.last_name || ''}`,
-            avatar_url: session.user.user_metadata?.avatar_url,
+            first_name: firstName,
+            last_name: lastName,
+            username: username,
+            name: fullName,
+            avatar_url: metadata.avatar_url,
           })
           .select()
           .single();
